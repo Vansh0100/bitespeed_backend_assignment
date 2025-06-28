@@ -17,14 +17,11 @@ This API helps Bitespeed identify and keep track of customer identity across mul
 
 - **Express.js** - Fast, unopinionated web framework
 - **PostgreSQL** - Reliable relational database with connection pooling
-- **JWT Authentication** - Secure token-based authentication
 - **Input Validation** - Request validation using Joi
 - **Error Handling** - Centralized error handling with custom error classes
-- **Logging** - Structured logging with Winston
 - **Security** - Helmet, CORS, rate limiting
 - **Database Migrations** - Automated database schema management
 - **Data Seeding** - Sample data generation
-- **Testing** - Jest testing framework with coverage
 - **Code Quality** - ESLint and Prettier for consistent code style
 
 ## Project Structure
@@ -56,11 +53,7 @@ backend/
 │   │   └── userRoutes.js          # User management routes
 │   ├── services/
 │   │   └── UserService.js         # Business logic layer
-│   ├── utils/
-│   │   └── logger.js              # Logging utility
 │   └── server.js                  # Main application entry point
-├── tests/                         # Test files
-├── logs/                          # Application logs
 ├── docs/                          # Documentation
 └── package.json
 ```
@@ -87,7 +80,7 @@ backend/
 
 3. **Set up environment variables:**
    ```bash
-   cp .env.example .env
+   cp .env
    ```
    
    Edit `.env` file with your database credentials and other configuration.
@@ -117,32 +110,9 @@ The API will be available at `http://localhost:3000`
 ## API Endpoints
 
 ### Contact Identity
-- `POST /api/v1/identify` - Main identity reconciliation endpoint
-- `GET /api/v1/contacts/search` - Search contacts by email or phone
+- `POST /api/v1/contacts/identify` - Main identity reconciliation endpoint
+- `GET /api/v1/contacts/get_all` - Get all contacts
 
-### Authentication
-- `POST /api/v1/auth/register` - Register new user
-- `POST /api/v1/auth/login` - User login
-- `GET /api/v1/auth/profile` - Get user profile (protected)
-- `PUT /api/v1/auth/profile` - Update user profile (protected)
-- `PUT /api/v1/auth/change-password` - Change password (protected)
-
-### Contacts (Admin only)
-- `GET /api/v1/contacts` - Get all contacts with pagination
-- `GET /api/v1/contacts/:id` - Get contact by ID
-- `GET /api/v1/contacts/:id/linked` - Get all linked contacts
-- `GET /api/v1/contacts/stats` - Get contact statistics
-
-### Users (Admin only)
-- `GET /api/v1/users` - Get all users with pagination
-- `GET /api/v1/users/:id` - Get user by ID
-- `POST /api/v1/users` - Create new user
-- `PUT /api/v1/users/:id` - Update user
-- `DELETE /api/v1/users/:id` - Delete user
-- `GET /api/v1/users/search?q=term` - Search users
-
-### Health Check
-- `GET /health` - Application health status
 
 ## Contact Identity System
 
@@ -174,7 +144,7 @@ contacts {
 
 ```bash
 # First purchase - creates primary contact
-curl -X POST http://localhost:3000/api/v1/identify \
+curl -X POST http://localhost:3000/api/v1/contacts/identify \
   -H "Content-Type: application/json" \
   -d '{"email": "john@example.com", "phoneNumber": "+1234567890"}'
 
@@ -262,7 +232,6 @@ npm run test:watch
 - **Helmet** - Sets security-related HTTP headers
 - **CORS** - Configurable cross-origin resource sharing
 - **Rate Limiting** - Prevents abuse with configurable limits
-- **JWT Authentication** - Secure token-based authentication
 - **Input Validation** - Validates all input using Joi schemas
 - **SQL Injection Protection** - Parameterized queries
 - **Password Hashing** - bcrypt for secure password storage
@@ -277,9 +246,7 @@ npm run test:watch
 | `DB_PORT` | Database port | 5432 |
 | `DB_NAME` | Database name | backend_db |
 | `DB_USER` | Database user | postgres |
-| `DB_PASSWORD` | Database password | password |
-| `JWT_SECRET` | JWT signing secret | - |
-| `JWT_EXPIRES_IN` | JWT expiration time | 24h |
+| `DB_PASSWORD` | Database password | password
 
 ## Error Handling
 
