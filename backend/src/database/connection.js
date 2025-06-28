@@ -4,23 +4,28 @@ const config = require('../config/config');
 class Database {
   constructor() {
     this.pool = new Pool({
-      connectionString: process.env.DB_CONN_LINK || `postgresql://${config.database.user}:${config.database.password}@${config.database.host}:${config.database.port}/${config.database.name}`,
-      host: config.database.host,
-      port: config.database.port,
-      database: config.database.name,
-      user: config.database.user,
-      password: config.database.password,
-      ssl: config.database.ssl ? { rejectUnauthorized: false } : false,
-      max: config.database.poolSize,
-      connectionTimeoutMillis: config.database.connectionTimeoutMillis,
-      idleTimeoutMillis: config.database.idleTimeoutMillis
+      connectionString:
+        process.env.DB_CONN_LINK ||
+        `postgresql://${config.database.user}:${config.database.password}@${config.database.host}:${config.database.port}/${config.database.name}`,
+      ssl: {
+        rejectUnauthorized: false
+      }
+      // host: config.database.host,
+      // port: config.database.port,
+      // database: config.database.name,
+      // user: config.database.user,
+      // password: config.database.password,
+      // ssl: config.database.ssl ? { rejectUnauthorized: false } : false,
+      // max: config.database.poolSize,
+      // connectionTimeoutMillis: config.database.connectionTimeoutMillis,
+      // idleTimeoutMillis: config.database.idleTimeoutMillis
     });
 
     this.pool.on('connect', () => {
       console.log('New client connected to PostgreSQL');
     });
 
-    this.pool.on('error', (err) => {
+    this.pool.on('error', err => {
       console.log('Unexpected error on idle client', err);
     });
   }
